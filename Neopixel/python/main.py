@@ -1,3 +1,9 @@
+"""
+Run this whit the following arguments in command line:
+    -path to port / port name
+    -baud rate (115200)
+"""
+
 import time
 import serial
 import sys
