@@ -37,14 +37,16 @@ if __name__ == "__main__":
 
 
     def send_data(data):
-        serial_port.write(str(data))
+        serial_port.write(data)
+        print data
 
 
     def send_data_ln(data):
-        send_data(str(data) + "/n")
+        send_data(str(data) + '\n')
 
 
     try:
+        time.sleep(2)
         send_data_ln(value3)
         print "data sent: " + value3
     except KeyboardInterrupt:

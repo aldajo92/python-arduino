@@ -1,11 +1,14 @@
 #include "FastLED.h"
 
 #define VALUE_SIZE 5
-#define NUM_LEDS 24
+#define NUM_LEDS 144
 #define DATA_PIN 3
+
+int charbuffer = 0;
 
 const CRGB customColor[] = 
   {
+    CRGB(0, 0, 0),
     CRGB(0, 255, 0),
     CRGB(255, 255, 0),
     CRGB(0, 0, 255),
@@ -40,10 +43,11 @@ void turnOff(){
   }
 }
 
-void turnLed(int pos, int r, int g, int b){
-  leds[pos].red = r;
-  leds[pos].green = g;
-  leds[pos].blue = b;
+void turnLed(String value){
+  for(int i=0; i<value.length(); i++){
+    charbuffer = (int) value[i] - 48;
+    leds[i] = customColor[charbuffer];
+  }
   FastLED.show();
 }
 
@@ -66,7 +70,7 @@ void parseCommand(String com) {
     echo(values[1]);
   }else
   if(values[0] == "led"){
-    turnLed(values[1].toInt(), values[2].toInt(), values[3].toInt(), values[4].toInt());
+    turnLed(values[1]);
   }
 
   com = "";
@@ -78,7 +82,6 @@ void serialEvent(){
     if (c == '\n') {
       parseCommand(command);
       command = "";
-      Serial.flush();
     }
     else {
       command += c;
