@@ -1,10 +1,11 @@
 #include "FastLED.h"
 
-#define VALUE_SIZE 5
+#define VALUE_SIZE 3
 #define NUM_LEDS 144
 #define DATA_PIN 3
 
 int charbuffer = 0;
+int offsetBuffer = 0;
 
 const CRGB customColor[] = 
   {
@@ -38,17 +39,15 @@ void turnOn(){
 void turnOff(){
   for(int i = 0; i <= NUM_LEDS; i++){
     leds[i] = CRGB::Black;
-    FastLED.show();
-    delay(50);
-  }
-}
-
-void turnLed(String value){
-  for(int i=0; i<value.length(); i++){
-    charbuffer = (int) value[i] - 48;
-    leds[i] = customColor[charbuffer];
   }
   FastLED.show();
+}
+
+void turnLed(String value, int offset){
+  for(int i=0; i<value.length(); i++){
+    charbuffer = (int) value[i] - 48;
+    leds[i + offset] = customColor[charbuffer];
+  }
 }
 
 void echo(String value){
@@ -70,13 +69,21 @@ void parseCommand(String com) {
     echo(values[1]);
   }else
   if(values[0] == "led"){
-    turnLed(values[1]);
+    offsetBuffer = values[1].toInt();
+    turnLed(values[2], offsetBuffer);
+  }else
+  if(values[0] == "update"){
+    FastLED.show();
+    Serial.flush();
+  }else
+  if(values[0] == "off"){
+    turnOff();
   }
 
   com = "";
 }
 
-void serialEvent(){
+void aserialEvent(){
   if (Serial.available()) {
     c = Serial.read();
     if (c == '\n') {
@@ -90,5 +97,14 @@ void serialEvent(){
 }
 
 void loop() {
-  
+  if (Serial.available()) {
+    c = Serial.read();
+    if (c == '\n') {
+      parseCommand(command);
+      command = "";
+    }
+    else {
+      command += c;
+    }
+  }
 }

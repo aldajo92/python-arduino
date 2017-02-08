@@ -44,9 +44,8 @@ void echo(String value){
 }
 
 void parseCommand(String com) {
-  String middle; //buffer
-
-  middle = com; //1-255-0-99
+  String middle;
+  middle = com;
 
   for(int i = 0; i < VALUE_SIZE; i++){
     values[i] = middle.substring(0, middle.indexOf("-"));

@@ -33,49 +33,43 @@ if __name__ == "__main__":
         exit(0)
 
 
-    def send_value(value):
-        string_led = 'led-' + str(value) + '\n'
-        print string_led
+    def send_value(value, offset):
+        string_led = 'led-' + str(offset) + '-' + str(value) + '\n'
         serial_port.write(string_led)
-        time.sleep(0.02)
+
+
+    def send_update():
+        string_led = 'update-0-0\n'
+        serial_port.write(string_led)
+
+
+    def send_off():
+        string_led = 'off-0-0\n'
+        serial_port.write(string_led)
+
 
     def num_array(val):
         returned = ""
-        for i in range(0, 100):
+        for i in range(0, 20):
             returned += val
         return returned
 
 
     def run():
-        time_delay = 0.02
+        time_delay = 0.2
         time.sleep(2)
-        # send_value("12341234")
-        # time.sleep(time_delay)
-        # send_value("00000000")
-        # time.sleep(time_delay)
-        # send_value("12341234")
-        # time.sleep(time_delay)
-        # send_value("00000000")
-        # time.sleep(time_delay)
-        # send_value("12341234")
-        # time.sleep(time_delay)
-        # send_value("00000000")
-        # time.sleep(time_delay)
-        # send_value("12341234")
-        # time.sleep(time_delay)
-        # send_value("00000000")
-        # time.sleep(time_delay)
-        # send_value("12341234")
-        # time.sleep(time_delay)
-        # send_value("00000000")
-        # time.sleep(time_delay)
-
         while True:
-            send_value(num_array("0"))
+            send_value(num_array("2"), 0)
+            send_value(num_array("2"), 20)
+            send_value(num_array("2"), 40)
+            send_value(num_array("2"), 60)
+            send_value(num_array("2"), 80)
+            send_value(num_array("2"), 100)
+            send_value(num_array("2"), 120)
+            send_update()
             time.sleep(time_delay)
-            send_value(num_array("1"))
+            send_off()
             time.sleep(time_delay)
-
 
     try:
         run()
